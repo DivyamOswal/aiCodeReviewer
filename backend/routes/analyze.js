@@ -1,8 +1,14 @@
+// backend/routes/analyze.js
+
 import express from "express";
-import { analyzeCode } from "../controllers/analyzeController.js";
-import auth from "../middleware/authMiddleware.js";
+import { analyzeCode, generateTestCases } from "../controllers/analyzeController.js";
 
 const router = express.Router();
-router.post("/", auth, analyzeCode);
+
+// POST /api/analyze               → audit analysis
+router.post("/", analyzeCode);
+
+// POST /api/analyze/generate-tests → test generation
+router.post("/generate-tests", generateTestCases);
 
 export default router;

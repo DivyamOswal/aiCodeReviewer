@@ -1,10 +1,16 @@
 import express from "express";
-import { analyzeGithubRepo } from "../controllers/githubController.js";
-import auth from "../middleware/authMiddleware.js";
+import {
+  analyzeGithubRepo,
+  generateTestCases,
+} from "../controllers/githubController.js";
+import protect from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-// ✅ MATCHES /api/github/analyze
-router.post("/analyze", auth, analyzeGithubRepo);
+// POST /api/github/analyze
+router.post("/analyze", protect, analyzeGithubRepo);
+
+// POST /api/github/generate-tests
+router.post("/generate-tests", protect, generateTestCases);
 
 export default router;

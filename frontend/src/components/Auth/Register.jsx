@@ -9,49 +9,101 @@ export default function Register() {
     password: "",
   });
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
   const navigate = useNavigate();
 
   const register = async () => {
-    await registerUser(form);
-    navigate("/login");
+    try {
+      setLoading(true);
+      setError("");
+
+      await registerUser(form);
+      navigate("/login");
+    } catch (err) {
+      setError(err.response?.data?.message || "Registration failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-96">
-        <h2 className="text-2xl font-bold text-center mb-6">
-          Create Account
-        </h2>
+    <div className="min-h-screen flex items-center justify-center 
+    bg-gradient-to-br from-gray-900 via-gray-800 to-black p-6">
 
+      <div className="w-full max-w-md 
+      bg-white/5 backdrop-blur-xl 
+      border border-white/10 
+      rounded-2xl shadow-2xl p-8">
+
+        {/* HEADER */}
+        <h2 className="text-2xl font-bold text-white text-center mb-2">
+          Create Account 🚀
+        </h2>
+        <p className="text-gray-400 text-sm text-center mb-6">
+          Start using Devguard AI today
+        </p>
+
+        {/* NAME */}
         <input
-          className="w-full mb-3 p-3 border rounded"
-          placeholder="Name"
+          type="text"
+          placeholder="Full Name"
+          className="w-full mb-3 p-3 rounded-lg 
+          bg-black border border-gray-700 
+          text-white placeholder-gray-500
+          focus:outline-none focus:ring-2 focus:ring-indigo-500"
           onChange={(e) => setForm({ ...form, name: e.target.value })}
         />
 
+        {/* EMAIL */}
         <input
-          className="w-full mb-3 p-3 border rounded"
+          type="email"
           placeholder="Email"
+          className="w-full mb-3 p-3 rounded-lg 
+          bg-black border border-gray-700 
+          text-white placeholder-gray-500
+          focus:outline-none focus:ring-2 focus:ring-indigo-500"
           onChange={(e) => setForm({ ...form, email: e.target.value })}
         />
 
+        {/* PASSWORD */}
         <input
           type="password"
-          className="w-full mb-6 p-3 border rounded"
           placeholder="Password"
+          className="w-full mb-4 p-3 rounded-lg 
+          bg-black border border-gray-700 
+          text-white placeholder-gray-500
+          focus:outline-none focus:ring-2 focus:ring-indigo-500"
           onChange={(e) => setForm({ ...form, password: e.target.value })}
         />
 
+        {/* ERROR */}
+        {error && (
+          <p className="text-red-400 text-sm mb-3">{error}</p>
+        )}
+
+        {/* BUTTON */}
         <button
           onClick={register}
-          className="w-full bg-green-600 text-white py-3 rounded hover:bg-green-700"
+          disabled={loading}
+          className={`w-full py-3 rounded-lg font-medium transition-all duration-300
+          ${
+            loading
+              ? "bg-gray-600 cursor-not-allowed"
+              : "bg-gradient-to-r from-green-500 to-emerald-600 hover:scale-105"
+          } text-white`}
         >
-          Register
+          {loading ? "Creating..." : "Register"}
         </button>
 
-        <p className="text-sm text-center mt-4">
+        {/* FOOTER */}
+        <p className="text-sm text-center mt-6 text-gray-400">
           Already have an account?{" "}
-          <Link to="/login" className="text-indigo-600">
+          <Link
+            to="/login"
+            className="text-indigo-400 hover:underline"
+          >
             Login
           </Link>
         </p>
