@@ -7,6 +7,7 @@ import Result from "../components/Result";
 /* ── DASHBOARD ───────────────────────────────────────────────── */
 export default function Dashboard() {
   const [data,       setData]       = useState(null);
+  const [statsKey,   setStatsKey]   = useState(0);   // ← increment to re-animate stats
   const [repoUrl,    setRepoUrl]    = useState("");
   const [analysis,   setAnalysis]   = useState(null);
   const [reportId,   setReportId]   = useState(null);
@@ -17,17 +18,20 @@ export default function Dashboard() {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
+  const loadDashboard = useCallback(() =>
     fetchDashboard()
       .then((res) => {
         setData(res.data);
+        setStatsKey((k) => k + 1);   // re-animate cards on every data refresh
         setTimeout(() => setMounted(true), 50);
       })
       .catch(() => {
         localStorage.removeItem("token");
         navigate("/login");
-      });
-  }, [navigate]);
+      })
+  , [navigate]);
+
+  useEffect(() => { loadDashboard(); }, [loadDashboard]);
 
   /* DOWNLOAD PDF */
   const downloadPDF = async () => {
@@ -41,9 +45,7 @@ export default function Dashboard() {
       const url  = window.URL.createObjectURL(blob);
       Object.assign(document.createElement("a"), { href: url, download: "AI-Code-Audit.pdf" }).click();
       URL.revokeObjectURL(url);
-    } catch {
-      alert("Download failed");
-    }
+    } catch { alert("Download failed"); }
   };
 
   /* GENERATE REPORT */
@@ -68,7 +70,8 @@ export default function Dashboard() {
         _sourceCode:      a._sourceCode       ?? "",
       });
       setActiveView("result");
-      fetchDashboard().then((r) => setData(r.data)).catch(() => {});
+      // ✅ Refresh stats — statsKey increment causes cards to remount & re-animate
+      loadDashboard();
     } catch (err) {
       setError(err.response?.data?.error || "Analysis failed");
     } finally {
@@ -97,7 +100,7 @@ export default function Dashboard() {
   if (!data) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black">
-        <div className="flex flex-col items-center gap-4 animate-[fadeUp_0.5s_ease_both]">
+        <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
           <p className="text-gray-400 text-sm">Loading dashboard…</p>
         </div>
@@ -109,17 +112,22 @@ export default function Dashboard() {
     ? Math.round(data.recentReports.reduce((s, r) => s + (r.scores?.codeQuality ?? 0), 0) / data.recentReports.length)
     : data.stats?.avgScore ?? 0;
 
+  const stats = [
+    { icon: "🔍", title: "Total Scans",     value: data.stats?.totalScans ?? 0,        sub: "repos analysed",     color: "indigo", delay: "0ms"   },
+    { icon: "⭐", title: "Avg Code Quality", value: `${avgQuality}%`,                   sub: "across all reports", color: "purple", delay: "80ms"  },
+    { icon: "🛡️", title: "DevOps Score",    value: `${data.stats?.devopsScore ?? 0}%`, sub: "CI/CD & infra",      color: "teal",   delay: "160ms" },
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
 
       {/* ── TOP BAR ─────────────────────────────── */}
       <div className="bg-gray-900/80 backdrop-blur border-b border-white/10 px-6 py-4 flex items-center gap-4">
-        <h1 className="text-xl font-bold transition-opacity duration-200">📊 Dashboard</h1>
+        <h1 className="text-xl font-bold">Dashboard</h1>
         {activeView === "result" && (
           <button
             onClick={() => setActiveView("home")}
-            className="text-sm text-gray-400 hover:text-white transition-all duration-200
-              flex items-center gap-1 hover:-translate-x-0.5"
+            className="text-sm text-gray-400 hover:text-white transition-all flex items-center gap-1 hover:-translate-x-0.5"
           >
             ← Back
           </button>
@@ -135,36 +143,20 @@ export default function Dashboard() {
 
       {/* ── HOME VIEW ───────────────────────────── */}
       {activeView === "home" && (
-        <div
-          className={`p-6 md:p-8 space-y-8
-            transition-all duration-500 ease-out
-            ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+        <div className={`p-6 md:p-8 space-y-8 transition-all duration-500 ease-out
+          ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
         >
 
-          {/* STATS */}
+          {/* ── STATS — key={statsKey} forces remount + re-animation on every refresh ── */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {[
-              { icon: "🔍", title: "Total Scans",      value: data.stats?.totalScans ?? 0,         sub: "repos analysed",     color: "indigo", delay: "0ms"   },
-              { icon: "⭐", title: "Avg Code Quality",  value: `${avgQuality}%`,                    sub: "across all reports", color: "purple", delay: "80ms"  },
-              { icon: "🛡️", title: "DevOps Score",     value: `${data.stats?.devopsScore ?? 0}%`,  sub: "CI/CD & infra",      color: "teal",   delay: "160ms" },
-            ].map((s) => (
-              <div
-                key={s.title}
-                className={`transition-all duration-500 ease-out
-                  ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
-                style={{ transitionDelay: s.delay }}
-              >
-                <StatCard {...s} />
-              </div>
+            {stats.map((s) => (
+              <StatCard key={`${s.title}-${statsKey}`} {...s} />
             ))}
           </div>
 
-          {/* ANALYZER */}
-          <div
-            className={`bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-lg
-              transition-all duration-500 ease-out
-              ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
-            style={{ transitionDelay: "240ms" }}
+          {/* ── ANALYZER ─────────────────────────── */}
+          <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-lg
+            transition-all duration-500 ease-out"
           >
             <div className="flex items-center gap-2 mb-1">
               <span className="text-lg">🔗</span>
@@ -202,7 +194,6 @@ export default function Dashboard() {
               </button>
             </div>
 
-            {/* Error */}
             {error && (
               <p className="text-red-400 text-sm mt-3 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2
                 animate-[fadeUp_0.25s_ease_both]">
@@ -210,38 +201,35 @@ export default function Dashboard() {
               </p>
             )}
 
-            {/* Feature chips */}
             <div className="mt-4 flex flex-wrap gap-2">
-              {["📊 Architecture", "🐛 Bugs", "🔐 Security", "🧪 Tests", "🗺 Roadmap"].map((f, i) => (
-                <span
-                  key={f}
-                  className={`px-2.5 py-1 text-xs rounded-full bg-white/5 border border-white/10 text-gray-400
-                    transition-all duration-300 hover:bg-white/10 hover:text-gray-200 hover:-translate-y-0.5 cursor-default
-                    ${mounted ? "opacity-100" : "opacity-0"}`}
-                  style={{ transitionDelay: `${300 + i * 40}ms` }}
-                >
+              {["📊 Architecture", "🐛 Bugs", "🔐 Security", "🧪 Tests", "🗺 Roadmap"].map((f) => (
+                <span key={f}
+                  className="px-2.5 py-1 text-xs rounded-full bg-white/5 border border-white/10 text-gray-400
+                    hover:bg-white/10 hover:text-gray-200 hover:-translate-y-0.5 cursor-default transition-all duration-200">
                   {f}
                 </span>
               ))}
             </div>
           </div>
 
-          {/* RECENT REPORTS */}
+          {/* ── RECENT REPORTS ───────────────────── */}
           {data.recentReports?.length > 0 && (
-            <div
-              className={`bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-lg
-                transition-all duration-500 ease-out
-                ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
-              style={{ transitionDelay: "320ms" }}
-            >
-              <h2 className="text-lg font-semibold mb-4">🕒 Recent Reports</h2>
+            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-lg">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold">🕒 Recent Reports</h2>
+                {/* Live indicator — pulses after each refresh */}
+                <span key={statsKey} className="flex items-center gap-1.5 text-xs text-emerald-400 animate-[fadeUp_0.3s_ease_both]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  Live
+                </span>
+              </div>
               <div className="space-y-3">
                 {data.recentReports.map((report, i) => (
+                  // key includes statsKey so rows re-animate on data refresh
                   <div
-                    key={report._id ?? i}
-                    className={`transition-all duration-400 ease-out
-                      ${mounted ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4"}`}
-                    style={{ transitionDelay: `${380 + i * 60}ms` }}
+                    key={`${report._id}-${statsKey}`}
+                    className="animate-[fadeUp_0.4s_ease_both]"
+                    style={{ animationDelay: `${i * 50}ms`, animationFillMode: "both" }}
                   >
                     <ReportRow report={report} onView={() => openResult(report)} />
                   </div>
@@ -252,7 +240,6 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* GLOBAL KEYFRAMES */}
       <style>{`
         @keyframes fadeUp {
           from { transform: translateY(8px); opacity: 0; }
@@ -263,23 +250,36 @@ export default function Dashboard() {
   );
 }
 
-/* ── STAT CARD ──────────────────────────────── */
-function StatCard({ icon, title, value, sub, color }) {
+/* ── STAT CARD — with count-up animation ────── */
+function StatCard({ icon, title, value, sub, color, delay }) {
+  const animated = useCountUp(value, 900);
+
   const colors = {
     indigo: "from-indigo-500/20 to-indigo-500/5 border-indigo-500/30",
     purple: "from-purple-500/20 to-purple-500/5 border-purple-500/30",
     teal:   "from-teal-500/20   to-teal-500/5   border-teal-500/30",
   };
-  const textColors = { indigo: "text-indigo-400", purple: "text-purple-400", teal: "text-teal-400" };
+  const textColors = {
+    indigo: "text-indigo-400",
+    purple: "text-purple-400",
+    teal:   "text-teal-400",
+  };
 
   return (
-    <div className={`bg-gradient-to-br ${colors[color]} border rounded-2xl p-5 backdrop-blur-xl
-      transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:border-white/20 cursor-default`}>
+    <div
+      className={`bg-gradient-to-br ${colors[color]} border rounded-2xl p-5 backdrop-blur-xl
+        transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:border-white/20
+        animate-[fadeUp_0.5s_ease_both] cursor-default`}
+      style={{ animationDelay: delay, animationFillMode: "both" }}
+    >
       <div className="flex items-center gap-2 mb-2">
         <span className="text-2xl">{icon}</span>
         <p className="text-gray-400 text-sm">{title}</p>
       </div>
-      <p className={`text-3xl font-bold ${textColors[color]}`}>{value}</p>
+      {/* animated count-up number */}
+      <p className={`text-3xl font-bold tabular-nums ${textColors[color]}`}>
+        {animated}
+      </p>
       <p className="text-gray-600 text-xs mt-1">{sub}</p>
     </div>
   );
@@ -302,16 +302,14 @@ function ReportRow({ report, onView }) {
     : 0;
 
   const repoName = report.repoUrl?.replace("https://github.com/", "") ?? "Unknown repo";
-  const date = report.createdAt
+  const date     = report.createdAt
     ? new Date(report.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })
     : "";
 
   return (
     <div className="flex items-center justify-between gap-4 p-4 rounded-xl
-      bg-white/5 hover:bg-white/10
-      border border-white/5 hover:border-white/10
-      transition-all duration-250 group
-      hover:shadow-md hover:-translate-y-px">
+      bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10
+      transition-all duration-200 group hover:shadow-md hover:-translate-y-px">
       <div className="flex items-center gap-3 min-w-0">
         <span className={`text-sm font-bold px-2 py-0.5 rounded-lg shrink-0 ${gradeColor}`}>{grade}</span>
         <div className="min-w-0">
@@ -325,8 +323,7 @@ function ReportRow({ report, onView }) {
           <div className="hidden md:flex gap-1 items-end h-6">
             {[report.scores.codeQuality, report.scores.security,
               report.scores.performance, report.scores.maintainability].map((v, i) => (
-              <div
-                key={i}
+              <div key={i}
                 className="w-1.5 bg-indigo-500 rounded-sm opacity-70 transition-all duration-300 group-hover:opacity-100"
                 style={{ height: `${Math.max(20, v)}%` }}
               />
@@ -344,4 +341,33 @@ function ReportRow({ report, onView }) {
       </div>
     </div>
   );
+}
+
+/* ── COUNT UP HOOK ──────────────────────────── */
+function useCountUp(target, duration = 800) {
+  const [value, setValue] = useState(0);
+  const rafRef = useRef(null);
+
+  useEffect(() => {
+    const raw  = String(target).replace("%", "");
+    const num  = parseFloat(raw) || 0;
+    const isPct = String(target).includes("%");
+    const start = performance.now();
+
+    cancelAnimationFrame(rafRef.current);
+
+    const tick = (now) => {
+      const elapsed  = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased    = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+      const current  = Math.round(num * eased);
+      setValue(isPct ? `${current}%` : current);
+      if (progress < 1) rafRef.current = requestAnimationFrame(tick);
+    };
+
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [target, duration]);
+
+  return value;
 }

@@ -1,220 +1,255 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useState, useEffect, useRef } from "react";
+// frontend/src/components/Navbar.jsx
+import { useState, useRef, useEffect, useMemo } from "react";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../App";
 
-export default function Navbar({ isAuth }) {
-  const location = useLocation();
+function getInitials(token) {
+  if (!token) return "U";
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    const name = payload.name ?? payload.email ?? "";
+    return (
+      name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2) || "U"
+    );
+  } catch {
+    return "U";
+  }
+}
+
+function getUserInfo(token) {
+  if (!token) return { name: "", email: "" };
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    return {
+      name: payload.name ?? "",
+      email: payload.email ?? "",
+    };
+  } catch {
+    return { name: "", email: "" };
+  }
+}
+
+export default function Navbar() {
   const navigate = useNavigate();
-
+  const location = useLocation();
+  const { isAuth, token, logout } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
-  const dropdownRef = useRef();
+  const [dropOpen, setDropOpen] = useState(false);
+  const dropRef = useRef(null);
 
-  /* MOUNT ANIMATION TRIGGER */
+  // Close dropdown on outside click
   useEffect(() => {
-    const t = setTimeout(() => setMounted(true), 10);
-    return () => clearTimeout(t);
-  }, []);
-
-  /* CLOSE DROPDOWN ON OUTSIDE CLICK */
-  useEffect(() => {
-    const handleClick = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setDropdownOpen(false);
+    const handler = (e) => {
+      if (dropRef.current && !dropRef.current.contains(e.target)) {
+        setDropOpen(false);
       }
     };
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  /* NAV LINK */
-  const navLink = (path, label) => {
-    const active = location.pathname === path;
-    return (
-      <Link
-        to={path}
-        onClick={() => setMenuOpen(false)}
-        className={`
-          relative px-3 py-1.5 rounded-lg text-sm font-medium
-          overflow-hidden transition-all duration-300 ease-out
-          hover:-translate-y-px
-          before:absolute before:inset-0 before:rounded-lg
-          before:bg-white/5 before:scale-x-0 before:origin-left
-          before:transition-transform before:duration-300
-          hover:before:scale-x-100
-          ${active
-            ? "bg-indigo-500/20 text-indigo-300"
-            : "text-gray-300 hover:text-white"
-          }
-        `}
-      >
-        {label}
-      </Link>
-    );
-  };
+  // Close mobile menu on route change
+  useEffect(() => {
+    setMenuOpen(false);
+    setDropOpen(false);
+  }, [location.pathname]);
 
-  /* LOGOUT */
-  const logout = () => {
-    localStorage.clear();
+  const initials = useMemo(() => getInitials(token), [token]);
+  const userInfo = useMemo(() => getUserInfo(token), [token]);
+
+  const handleLogout = () => {
+    setDropOpen(false);
+    logout();
     navigate("/login");
   };
 
-  return (
-    <nav
-      className={`
-        sticky top-0 z-50
-        bg-gradient-to-r from-gray-900 via-gray-800 to-black
-        border-b border-white/10
-        shadow-[0_4px_20px_rgba(0,0,0,0.6)]
-        px-6 py-3 flex justify-between items-center
-        transition-all duration-500 ease-out
-        ${mounted ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"}
-      `}
+  const navLink = (to, label) => (
+    <NavLink
+      to={to}
+      className={({ isActive }) =>
+        `px-3 py-1.5 rounded-lg text-sm font-medium transition-all
+        ${
+          isActive
+            ? "bg-indigo-500/20 text-indigo-300"
+            : "text-gray-400 hover:text-white hover:bg-white/5"
+        }`
+      }
     >
-      {/* LOGO */}
-      <h1
-        onClick={() => navigate("/")}
-        className="cursor-pointer text-lg md:text-xl font-bold
-        bg-gradient-to-r from-indigo-400 to-purple-500
-        bg-clip-text text-transparent
-        transition-opacity duration-200 hover:opacity-75"
-      >
-        Devguard AI
-      </h1>
+      {label}
+    </NavLink>
+  );
 
-      {/* DESKTOP NAV */}
-      <div className="hidden md:flex items-center gap-3">
-        {!isAuth ? (
-          <>
-            {navLink("/login", "Login")}
-            <Link
-              to="/register"
-              className="px-4 py-1.5 rounded-lg text-sm font-medium
-              bg-gradient-to-r from-indigo-500 to-purple-600
-              text-white
-              transition-all duration-200
-              hover:scale-105 hover:shadow-[0_4px_16px_rgba(99,102,241,0.4)]
-              active:scale-95"
-            >
-              Register
-            </Link>
-          </>
-        ) : (
-          <>
+  return (
+    <nav className="sticky top-0 z-50 bg-gray-900/80 backdrop-blur-xl border-b border-white/10 px-6 py-3">
+      <div className="flex items-center justify-between gap-4">
+        {/* LOGO */}
+        <NavLink to="/" className="flex items-center gap-2 shrink-0">
+          <span className="text-xl"></span>
+          <span className="font-bold text-violet-400 text-xl hidden sm:block">
+            Devguard AI
+          </span>
+        </NavLink>
+
+        {/* DESKTOP LINKS */}
+        {isAuth && (
+          <div className="hidden md:flex items-center gap-1">
             {navLink("/dashboard", "Dashboard")}
             {navLink("/history", "History")}
+            
+          </div>
+        )}
 
-            <div className="w-px h-5 bg-white/10 mx-2" />
-
-            {/* AVATAR + DROPDOWN */}
-            <div className="relative" ref={dropdownRef}>
+        {/* RIGHT SIDE */}
+        <div className="flex items-center gap-3">
+          {isAuth ? (
+            <div className="relative" ref={dropRef}>
               <button
-                onClick={() => setDropdownOpen((o) => !o)}
-                className="w-9 h-9 rounded-full
-                bg-gradient-to-r from-indigo-500 to-purple-600
-                flex items-center justify-center
-                text-white text-sm font-bold
-                transition-all duration-200
-                hover:scale-110 hover:shadow-[0_0_0_3px_rgba(99,102,241,0.3)]
-                active:scale-95"
+                onClick={() => setDropOpen((p) => !p)}
+                aria-label="Open user menu"
+                aria-expanded={dropOpen}
+                className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600
+                  flex items-center justify-center text-sm font-bold text-white
+                  hover:scale-105 transition-all shadow-lg"
               >
-                U
+                {initials}
               </button>
 
-              {/* DROPDOWN */}
-              {dropdownOpen && (
+              {dropOpen && (
                 <div
-                  className="absolute right-0 mt-2 w-44
-                  bg-black/90 backdrop-blur-xl
-                  border border-white/10 rounded-xl shadow-xl p-2
-                  origin-top-right"
-                  style={{
-                    animation: "dropIn 0.25s cubic-bezier(0.34,1.56,0.64,1) both",
-                  }}
+                  className="absolute right-0 top-12 w-52 bg-gray-900 border border-white/10
+                  rounded-2xl shadow-2xl overflow-hidden z-50 animate-fade-in"
                 >
-                  {["Profile", "Settings"].map((item) => (
+                  {/* User info */}
+                  <div className="px-4 py-3 border-b border-white/10">
+                    <p className="text-sm font-semibold text-white truncate">
+                      {userInfo.name || initials}
+                    </p>
+                    <p className="text-xs text-gray-500 truncate">
+                      {userInfo.email || "Signed in"}
+                    </p>
+                  </div>
+
+                  {/* Menu items */}
+                  <div className="py-1">
+                    <DropItem
+                      icon="👤"
+                      label="Profile"
+                      onClick={() => navigate("/profile")}
+                    />
+                    <DropItem
+                      icon="⚙️"
+                      label="Settings"
+                      onClick={() => navigate("/settings")}
+                    />
+                    <DropItem
+                      icon="📋"
+                      label="History"
+                      onClick={() => navigate("/history")}
+                    />
+                    <DropItem
+                      icon="📊"
+                      label="Dashboard"
+                      onClick={() => navigate("/dashboard")}
+                    />
+                    
+                  </div>
+
+                  {/* Logout */}
+                  <div className="border-t border-white/10 py-1">
                     <button
-                      key={item}
-                      className="w-full text-left px-3 py-2 text-sm text-gray-300
-                      rounded-lg
-                      transition-all duration-150
-                      hover:bg-white/10 hover:text-white hover:translate-x-1"
+                      onClick={handleLogout}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-400
+                        hover:bg-red-500/10 transition text-left"
                     >
-                      {item}
+                      <span>🚪</span> Sign out
                     </button>
-                  ))}
-
-                  <div className="border-t border-white/10 my-2" />
-
-                  <button
-                    onClick={logout}
-                    className="w-full text-left px-3 py-2 text-sm text-red-400
-                    rounded-lg
-                    transition-all duration-150
-                    hover:bg-red-500/10 hover:text-red-300 hover:translate-x-1"
-                  >
-                    Logout
-                  </button>
+                  </div>
                 </div>
               )}
             </div>
-          </>
-        )}
-      </div>
+          ) : (
+            <div className="flex gap-2">
+              <NavLink
+                to="/login"
+                className="px-4 py-1.5 text-sm rounded-lg border border-white/10 text-gray-300
+                  hover:bg-white/5 transition"
+              >
+                Sign in
+              </NavLink>
+              <NavLink
+                to="/register"
+                className="px-4 py-1.5 text-sm rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600
+                  text-white hover:scale-105 transition"
+              >
+                Register
+              </NavLink>
+            </div>
+          )}
 
-      {/* MOBILE BUTTON */}
-      <button
-        className="md:hidden text-gray-300 text-xl
-        transition-transform duration-200
-        hover:scale-110 active:scale-90"
-        onClick={() => setMenuOpen((o) => !o)}
-      >
-        {menuOpen ? "✕" : "☰"}
-      </button>
+          {/* MOBILE HAMBURGER */}
+          {isAuth && (
+            <button
+              onClick={() => setMenuOpen((p) => !p)}
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              className="md:hidden text-gray-400 hover:text-white transition"
+            >
+              {menuOpen ? "✕" : "☰"}
+            </button>
+          )}
+        </div>
+      </div>
 
       {/* MOBILE MENU */}
-      <div
-        className={`
-          absolute top-14 left-0 w-full
-          bg-black/95 backdrop-blur-xl
-          border-t border-white/10
-          p-4 flex flex-col gap-3 md:hidden
-          transition-all duration-300 ease-out
-          ${menuOpen
-            ? "opacity-100 translate-y-0 pointer-events-auto"
-            : "opacity-0 -translate-y-2 pointer-events-none"
-          }
-        `}
-      >
-        {!isAuth ? (
-          <>
-            {navLink("/login", "Login")}
-            {navLink("/register", "Register")}
-          </>
-        ) : (
-          <>
-            {navLink("/dashboard", "Dashboard")}
-            {navLink("/history", "History")}
-            <div className="border-t border-white/10 my-2" />
-            <button
-              onClick={logout}
-              className="text-left text-red-400 px-2 py-1 rounded
-              transition-all duration-150
-              hover:bg-red-500/10 hover:translate-x-1"
+      {isAuth && menuOpen && (
+        <div className="md:hidden mt-3 pb-2 border-t border-white/10 pt-3 flex flex-col gap-1">
+          {[
+            ["/dashboard", "📊 Dashboard"],
+           
+            ["/history", "📋 History"],
+            ["/profile", "👤 Profile"],
+            ["/settings", "⚙️ Settings"],
+          ].map(([to, label]) => (
+            <NavLink
+              key={to}
+              to={to}
+              onClick={() => setMenuOpen(false)}
+              className={({ isActive }) =>
+                `px-4 py-2.5 rounded-xl text-sm transition
+                ${
+                  isActive
+                    ? "bg-indigo-500/20 text-indigo-300"
+                    : "text-gray-400 hover:text-white hover:bg-white/5"
+                }`
+              }
             >
-              Logout
-            </button>
-          </>
-        )}
-      </div>
-
-      {/* KEYFRAMES */}
-      <style>{`
-        @keyframes dropIn {
-          from { transform: scale(0.88); opacity: 0; }
-          to   { transform: scale(1);   opacity: 1; }
-        }
-      `}</style>
+              {label}
+            </NavLink>
+          ))}
+          <button
+            onClick={handleLogout}
+            className="px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 rounded-xl text-left transition"
+          >
+            🚪 Sign out
+          </button>
+        </div>
+      )}
     </nav>
+  );
+}
+
+function DropItem({ icon, label, onClick }) {
+  return (
+    <button
+      onClick={onClick}
+      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300
+        hover:bg-white/5 hover:text-white transition text-left"
+    >
+      <span>{icon}</span> {label}
+    </button>
   );
 }
