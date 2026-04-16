@@ -1,19 +1,7 @@
 // backend/controllers/analyzeController.js
-
 import { analyzeWithGroq, generateTests } from "../utils/groq.js";
 
-// ─────────────────────────────────────────────
 //  POST /api/analyze
-//
-//  Body: { code: string }
-//
-//  Returns:
-//    { ...auditResult, _sourceCode: string }
-//
-//  The _sourceCode field is echoed back so the
-//  frontend can use it for test generation without
-//  re-fetching the repo or losing it to state timing.
-// ─────────────────────────────────────────────
 export const analyzeCode = async (req, res) => {
   try {
     const { code } = req.body;
@@ -40,11 +28,7 @@ export const analyzeCode = async (req, res) => {
   }
 };
 
-// ─────────────────────────────────────────────
 //  POST /api/analyze/generate-tests
-//
-//  Body: { code: string }
-// ─────────────────────────────────────────────
 export const generateTestCases = async (req, res) => {
   try {
     const { code } = req.body;

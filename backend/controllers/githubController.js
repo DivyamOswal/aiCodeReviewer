@@ -2,9 +2,7 @@ import { analyzeWithGroq, generateTests } from "../utils/groq.js";
 import { parseGithubRepo } from "../utils/githubParser.js";
 import Report from "../models/Report.js";
 
-// ─────────────────────────────────────────────
-//  POST /api/github/analyze  (or wherever this is mounted)
-// ─────────────────────────────────────────────
+//  POST /api/github/analyze  
 export const analyzeGithubRepo = async (req, res) => {
   try {
     const { repoUrl } = req.body;
@@ -12,13 +10,9 @@ export const analyzeGithubRepo = async (req, res) => {
       return res.status(400).json({ error: "Repo URL required" });
     }
 
-    // Step 1 — fetch source code from GitHub
     const code = await parseGithubRepo(repoUrl);
-
-    // Step 2 — AI analysis
     const ai = await analyzeWithGroq(code);
 
-    /* 🔒 NORMALIZE AI RESPONSE */
     const analysis = {
       summary: ai.summary ?? "No summary provided.",
 
@@ -50,9 +44,6 @@ export const analyzeGithubRepo = async (req, res) => {
       finalVerdict:
         ai.finalVerdict ??
         "The project demonstrates solid fundamentals with scope for improvement.",
-
-      // ✅ Echo source code back so Result.jsx can use it for test generation
-      // Result.jsx reads this as data._sourceCode — no extra prop needed
       _sourceCode: code,
     };
 
@@ -73,9 +64,7 @@ export const analyzeGithubRepo = async (req, res) => {
   }
 };
 
-// ─────────────────────────────────────────────
 //  POST /api/github/generate-tests
-// ─────────────────────────────────────────────
 export const generateTestCases = async (req, res) => {
   try {
     const { code } = req.body;

@@ -4,7 +4,7 @@ import { analyzeGithub, generateTests } from "../api/github";
 import { useNavigate } from "react-router-dom";
 import Result from "../components/Result";
 
-/* ── DASHBOARD ───────────────────────────────────────────────── */
+/*  DASHBOARD  */
 export default function Dashboard() {
   const [data,       setData]       = useState(null);
   const [statsKey,   setStatsKey]   = useState(0);   // ← increment to re-animate stats
@@ -70,7 +70,7 @@ export default function Dashboard() {
         _sourceCode:      a._sourceCode       ?? "",
       });
       setActiveView("result");
-      // ✅ Refresh stats — statsKey increment causes cards to remount & re-animate
+      //  Refresh stats - statsKey increment causes cards to remount & re-animate
       loadDashboard();
     } catch (err) {
       setError(err.response?.data?.error || "Analysis failed");
@@ -212,7 +212,7 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* ── RECENT REPORTS ───────────────────── */}
+          {/* RECENT REPORTS  */}
           {data.recentReports?.length > 0 && (
             <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-lg">
               <div className="flex items-center justify-between mb-4">
@@ -250,7 +250,7 @@ export default function Dashboard() {
   );
 }
 
-/* ── STAT CARD — with count-up animation ────── */
+/*  STAT CARD - with count-up animation  */
 function StatCard({ icon, title, value, sub, color, delay }) {
   const animated = useCountUp(value, 900);
 
@@ -285,7 +285,7 @@ function StatCard({ icon, title, value, sub, color, delay }) {
   );
 }
 
-/* ── REPORT ROW ─────────────────────────────── */
+/*  REPORT ROW  */
 function ReportRow({ report, onView }) {
   const grade = report.grade ?? "N/A";
   const gradeColor = {
@@ -343,7 +343,7 @@ function ReportRow({ report, onView }) {
   );
 }
 
-/* ── COUNT UP HOOK ──────────────────────────── */
+/*  COUNT UP HOOK  */
 function useCountUp(target, duration = 800) {
   const [value, setValue] = useState(0);
   const rafRef = useRef(null);

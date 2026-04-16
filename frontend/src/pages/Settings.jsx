@@ -81,7 +81,7 @@ export default function Settings() {
     toastTimer.current = setTimeout(() => setToast(null), 3500);
   };
 
-  /* ── SAVE PROFILE ─────────────────────────── */
+  /*  SAVE PROFILE  */
   const saveProfile = async () => {
     if (!name.trim()) return showToast("Name cannot be empty.", "error");
     if (!email.trim()) return showToast("Email cannot be empty.", "error");
@@ -101,7 +101,7 @@ export default function Settings() {
     }
   };
 
-  /* ── CHANGE PASSWORD ──────────────────────── */
+  /*  CHANGE PASSWORD  */
   const changePassword = async () => {
     if (!oldPass || !newPass || !confPass)
       return showToast("Fill in all password fields.", "error");
@@ -129,7 +129,7 @@ export default function Settings() {
     }
   };
 
-  /* ── SAVE APPEARANCE ──────────────────────── */
+  /*  SAVE APPEARANCE  */
   const saveAppearance = () => {
     try {
       localStorage.setItem(THEME_KEY, theme);
@@ -141,7 +141,7 @@ export default function Settings() {
     }
   };
 
-  /* ── CLEAR HISTORY ────────────────────────── */
+  /*  CLEAR HISTORY  */
   const clearHistory = async () => {
     if (!window.confirm("Delete all reports? This cannot be undone.")) return;
     try {
@@ -152,7 +152,7 @@ export default function Settings() {
     }
   };
 
-  /* ── DELETE ACCOUNT ───────────────────────── */
+  /*  DELETE ACCOUNT  */
   const deleteAccount = async () => {
     if (
       !window.confirm(
@@ -235,7 +235,7 @@ export default function Settings() {
           {/* PANEL */}
           <div className="flex-1 space-y-5">
 
-            {/* ── ACCOUNT ──────────────────────── */}
+            {/*  ACCOUNT  */}
             {tab === "Account" && (
               <Section title="Public Profile">
                 <div className="flex items-center gap-4 mb-5">
@@ -281,7 +281,7 @@ export default function Settings() {
               </Section>
             )}
 
-            {/* ── SECURITY ─────────────────────── */}
+            {/*  SECURITY  */}
             {tab === "Security" && (
               <Section title="Change Password">
                 <Field label="Current Password">
@@ -330,7 +330,7 @@ export default function Settings() {
               </Section>
             )}
 
-            {/* ── APPEARANCE ───────────────────── */}
+            {/*  APPEARANCE  */}
             {tab === "Appearance" && (
               <Section title="Display Preferences">
                 <Field label="Theme">
@@ -375,7 +375,7 @@ export default function Settings() {
               </Section>
             )}
 
-            {/* ── DANGER ZONE ──────────────────── */}
+            {/*  DANGER ZONE  */}
             {tab === "Danger Zone" && (
               <Section title="Danger Zone" danger>
                 <div className="space-y-4">
@@ -419,7 +419,7 @@ export default function Settings() {
   );
 }
 
-/* ── UI helpers ─────────────────────────────── */
+/*  UI helpers  */
 
 function Section({ title, children, danger }) {
   return (

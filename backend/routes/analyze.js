@@ -5,10 +5,10 @@ import { analyzeCode, generateTestCases } from "../controllers/analyzeController
 
 const router = express.Router();
 
-// POST /api/analyze               → audit analysis
+// POST /api/analyze               
 router.post("/", analyzeCode);
 
-// POST /api/analyze/generate-tests → test generation
+// POST /api/analyze/generate-tests
 router.post("/generate-tests", generateTestCases);
 
 export default router;

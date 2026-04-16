@@ -11,6 +11,7 @@ export const register = async (req, res) => {
   res.json({ success: true });
 };
 
+// User login
 export const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
@@ -27,6 +28,7 @@ export const login = async (req, res) => {
   res.json({ token });
 };
 
+// Download Report
 export const downloadReportPDF = async (req, res) => {
   const report = await Report.findById(req.params.id);
   const doc = new PDFDocument();

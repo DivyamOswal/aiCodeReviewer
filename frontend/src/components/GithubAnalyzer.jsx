@@ -40,7 +40,7 @@ export default function GithubAnalyzer({ setData }) {
     if (setData) setData(null);
   };
 
-  // ── Results view ──────────────────────────────
+  // Results view
   if (analysis) {
     return (
       <div>
@@ -77,7 +77,7 @@ export default function GithubAnalyzer({ setData }) {
     );
   }
 
-  // ── Input view ────────────────────────────────
+  // Input view 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center p-6">
       <div className="w-full max-w-3xl bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-6">

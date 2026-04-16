@@ -19,7 +19,7 @@ export default function Profile() {
     setLoading(true);
     setError(null);
 
-    // ── Decode JWT as immediate fallback (no network needed) ──
+    // ── Decode JWT as immediate fallback (no network needed) 
     try {
       const payload = JSON.parse(atob(token.split(".")[1]));
       setUser({
@@ -29,17 +29,17 @@ export default function Profile() {
       });
     } catch { /* ignore */ }
 
-    // ── Try /auth/me for full user data (name, createdAt, etc.) ──
+    //  Try /auth/me for full user data (name, createdAt, etc.) 
     const mePromise = axios.get("/auth/me")
       .then((res) => {
         const u = res.data.user ?? res.data;
         setUser(u);
       })
       .catch(() => {
-        // JWT decode already set a fallback — just continue
+        // JWT decode already set a fallback - just continue
       });
 
-    // ── Load reports ──
+    //  Load reports 
     const reportsPromise = axios.get("/report")
       .then((res) => setReports(res.data.reports ?? []))
       .catch(() => setReports([]));
@@ -91,7 +91,7 @@ export default function Profile() {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-6 md:p-10">
       <div className="max-w-4xl mx-auto space-y-8">
 
-        {/* ── HERO ─────────────────────────────── */}
+        {/*  HERO  */}
         <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl overflow-hidden">
           <div className="absolute -top-20 -right-20 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -122,7 +122,7 @@ export default function Profile() {
           </div>
         </div>
 
-        {/* ── STATS ────────────────────────────── */}
+        {/*  STATS */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <StatCard icon="🔍" label="Total Scans"   value={totalScans}          color="indigo" />
           <StatCard icon="⭐" label="Avg Score"     value={`${avgScore}%`}       color="purple" />
@@ -130,7 +130,7 @@ export default function Profile() {
           <StatCard icon="🛡️" label="A-Grade Repos" value={gradeCounts["A"] ?? 0} color="green" />
         </div>
 
-        {/* ── GRADE BREAKDOWN ──────────────────── */}
+        {/* GRADE BREAKDOWN  */}
         {totalScans > 0 && (
           <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
             <h2 className="text-lg font-semibold mb-4">Grade Breakdown</h2>
@@ -158,7 +158,7 @@ export default function Profile() {
           </div>
         )}
 
-        {/* ── RECENT ACTIVITY ──────────────────── */}
+        {/*  RECENT ACTIVITY  */}
         {reports.length > 0 && (
           <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
             <div className="flex items-center justify-between mb-4">
@@ -191,7 +191,7 @@ export default function Profile() {
           </div>
         )}
 
-        {/* ── EMPTY STATE ──────────────────────── */}
+        {/*  EMPTY STATE  */}
         {totalScans === 0 && !loading && (
           <div className="text-center py-16 text-gray-500">
             <p className="text-5xl mb-4">🔭</p>

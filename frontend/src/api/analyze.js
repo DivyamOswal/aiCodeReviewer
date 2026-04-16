@@ -4,17 +4,13 @@
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 const GITHUB_API = "https://api.github.com";
 
-// ─────────────────────────────────────────────
 //  GitHub repo fetcher (runs in browser)
-// ─────────────────────────────────────────────
-
 function parseGitHubUrl(url) {
   const match = url.match(/github\.com\/([^/]+)\/([^/]+?)(?:\.git)?(?:\/|$)/);
   if (!match) throw new Error(`Invalid GitHub URL: ${url}`);
   return { owner: match[1], repo: match[2] };
 }
 
-// ✅ Includes .sh, .bash, .zsh so shell-script repos are analysable
 const CODE_EXTENSIONS = new Set([
   ".js", ".jsx", ".ts", ".tsx",
   ".py", ".java", ".go", ".rs",
@@ -123,13 +119,10 @@ export async function fetchRepoContents(repoUrl, token = "", maxChars = 28_000) 
   return combined;
 }
 
-// ─────────────────────────────────────────────
 //  POST /api/analyze
-//
 //  Returns { auditResult, sourceCode }
 //  sourceCode is echoed back by the backend so
 //  the frontend never loses it to state timing.
-// ─────────────────────────────────────────────
 export async function analyzeCode(code) {
   if (!code?.trim()) throw new Error("No source code provided.");
 
@@ -161,9 +154,7 @@ export async function analyzeCode(code) {
   return { auditResult, sourceCode };
 }
 
-// ─────────────────────────────────────────────
 //  POST /api/analyze/generate-tests
-// ─────────────────────────────────────────────
 export async function generateTests(code) {
   if (!code?.trim()) throw new Error("No source code provided for test generation.");
 

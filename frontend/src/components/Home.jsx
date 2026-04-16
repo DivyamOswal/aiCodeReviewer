@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 
-/* ── PARTICLE FIELD ─────────────────────────── */
+ // PARTICLE FIELD
 function ParticleField() {
   const canvasRef = useRef(null);
 
@@ -75,7 +75,7 @@ function ParticleField() {
   );
 }
 
-/* ── ANIMATED BADGE ─────────────────────────── */
+// ANIMATED BADGE
 function Badge() {
   return (
     <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full
@@ -87,7 +87,7 @@ function Badge() {
   );
 }
 
-/* ── TYPING EFFECT ──────────────────────────── */
+// TYPING EFFECT
 function TypedWord({ words }) {
   const [index, setIndex]   = useState(0);
   const [text,  setText]    = useState("");
@@ -122,7 +122,7 @@ function TypedWord({ words }) {
   );
 }
 
-/* ── FEATURE CARD ───────────────────────────── */
+//  FEATURE CARD
 function Feature({ icon, title, desc, delay, color }) {
   const [hovered, setHovered] = useState(false);
 
@@ -156,8 +156,7 @@ function Feature({ icon, title, desc, delay, color }) {
     </div>
   );
 }
-
-/* ── STAT PILL ──────────────────────────────── */
+// STAT PILL 
 function StatPill({ value, label }) {
   return (
     <div className="flex flex-col items-center px-6 py-3 rounded-2xl bg-white/[0.04] border border-white/8">
@@ -167,7 +166,7 @@ function StatPill({ value, label }) {
   );
 }
 
-/* ── SCAN LINE EFFECT ───────────────────────── */
+// SCAN LINE EFFECT
 function ScanLine() {
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-2xl">
@@ -177,7 +176,7 @@ function ScanLine() {
   );
 }
 
-/* ── HOME PAGE ──────────────────────────────── */
+// HOME PAGE
 export default function Home() {
   const token    = localStorage.getItem("token");
   const [show, setShow] = useState(false);

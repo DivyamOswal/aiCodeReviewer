@@ -1,10 +1,6 @@
 import Groq from "groq-sdk";
 import path from "path";
 
-// ─────────────────────────────────────────────
-//  GitHub helpers  (public repos only)
-// ─────────────────────────────────────────────
-
 const GITHUB_API = "https://api.github.com";
 
 /** Parse   https://github.com/owner/repo   →  { owner, repo } */

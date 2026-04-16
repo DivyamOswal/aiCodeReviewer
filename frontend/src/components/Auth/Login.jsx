@@ -6,7 +6,7 @@ import { useAuth } from "../../App";
 
 export default function Login() {
   const navigate      = useNavigate();
-  const { login }     = useAuth();          // ← context login, not localStorage directly
+  const { login }     = useAuth();         
   const [email,    setEmail]    = useState("");
   const [password, setPassword] = useState("");
   const [error,    setError]    = useState("");
@@ -22,7 +22,6 @@ export default function Login() {
       const res = await axios.post("/auth/login", { email, password });
       const token = res.data.token;
 
-      // ✅ This updates React state — Navbar re-renders immediately, no refresh needed
       login(token);
 
       navigate("/dashboard");

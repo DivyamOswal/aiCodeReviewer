@@ -44,7 +44,7 @@ export default function History() {
     }
   };
 
-  // ── Filter + sort ─────────────────────────────
+  //  Filter + sort 
   const filtered = useMemo(() => {
     let list = [...reports];
 
@@ -73,7 +73,7 @@ export default function History() {
     return list;
   }, [reports, search, sortBy, filterGrade]);
 
-  // ── Full report view ─────────────────────────
+  //  Full report view 
   if (selected) {
     return (
       <div>
@@ -97,7 +97,7 @@ export default function History() {
     );
   }
 
-  // ── Main history view ─────────────────────────
+  //  Main history view 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-6 md:p-8">
 
@@ -213,9 +213,7 @@ export default function History() {
   );
 }
 
-// ─────────────────────────────────────────────
 //  Report Card
-// ─────────────────────────────────────────────
 function ReportCard({ report: r, onView, onDownload }) {
   const grade  = r.grade ?? "N/A";
   const styles = gradeStyle(grade[0]);
@@ -308,9 +306,7 @@ function ReportCard({ report: r, onView, onDownload }) {
   );
 }
 
-// ─────────────────────────────────────────────
 //  Score Bar
-// ─────────────────────────────────────────────
 function ScoreBar({ label, value }) {
   const val = typeof value === "number" ? value : 0;
   const color = val >= 75 ? "from-green-400 to-emerald-500"
@@ -332,9 +328,7 @@ function ScoreBar({ label, value }) {
   );
 }
 
-// ─────────────────────────────────────────────
 //  Grade styles
-// ─────────────────────────────────────────────
 function gradeStyle(letter) {
   const map = {
     A: { badge: "bg-green-500/20  text-green-400",  text: "text-green-400"  },

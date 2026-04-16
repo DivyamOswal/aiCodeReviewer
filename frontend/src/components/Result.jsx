@@ -6,7 +6,7 @@ import {
   PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer,
 } from "recharts";
 
-// ✅ Import directly — works even when parent forgets to pass generateTestsFn
+// Import directly — works even when parent forgets to pass generateTestsFn
 import { generateTests as defaultGenerateTests } from "../api/github";
 
 // ─────────────────────────────────────────────
@@ -85,7 +85,7 @@ export default function Result({ data, sourceCode: sourceCodeProp = "", onDownlo
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black p-6 md:p-8 text-white space-y-8">
 
-      {/* ── HEADER ────────────────────────────── */}
+      {/*  HEADER  */}
       <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
         <h1 className="text-2xl md:text-3xl font-bold">📊 AI Code Analysis Report</h1>
         <div className="flex items-center gap-4">
@@ -106,7 +106,7 @@ export default function Result({ data, sourceCode: sourceCodeProp = "", onDownlo
         </div>
       </div>
 
-      {/* ── SCORE CARDS ───────────────────────── */}
+      {/*  SCORE CARDS  */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <ScoreCard label="Code Quality"    value={scores.codeQuality}     />
         <ScoreCard label="Security"        value={scores.security}        />
@@ -114,10 +114,10 @@ export default function Result({ data, sourceCode: sourceCodeProp = "", onDownlo
         <ScoreCard label="Maintainability" value={scores.maintainability} />
       </div>
 
-      {/* ── TAB BAR ───────────────────────────── */}
+      {/*  TAB BAR  */}
       <div className="flex gap-2 border-b border-white/10">
         {[
-          { id: "audit", label: "📊 Audit Report" },
+          { id: "audit", label: " Audit Report" },
           { id: "tests", label: "🧪 Test Cases"   },
         ].map((tab) => (
           <button
@@ -145,9 +145,7 @@ export default function Result({ data, sourceCode: sourceCodeProp = "", onDownlo
         )}
       </div>
 
-      {/* ════════════════════════════════════════
-          AUDIT TAB
-      ════════════════════════════════════════ */}
+      {/* AUDIT TAB */}
       {activeTab === "audit" && (
         <div className="space-y-8">
           <GlassCard title="Executive Summary">
@@ -224,9 +222,7 @@ export default function Result({ data, sourceCode: sourceCodeProp = "", onDownlo
         </div>
       )}
 
-      {/* ════════════════════════════════════════
-          TESTS TAB
-      ════════════════════════════════════════ */}
+      {/* TESTS TAB   */}
       {activeTab === "tests" && (
         <div className="space-y-8">
 
@@ -412,9 +408,8 @@ export default function Result({ data, sourceCode: sourceCodeProp = "", onDownlo
   );
 }
 
-// ─────────────────────────────────────────────
+
 //  Sub-components
-// ─────────────────────────────────────────────
 function GlassCard({ title, children }) {
   return (
     <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-lg">
