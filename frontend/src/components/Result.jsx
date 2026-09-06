@@ -283,7 +283,7 @@ export default function Result({
 
           <div className="flex items-center gap-3">
             <div
-              className={`rounded-xl border border-[var(--border-light)] bg-[var(--bg-card)] ${gradeBoxPadding}`}
+              className={`rounded-xl border border-[var(--border-light)] bg-[var(--bg-card)] shadow-[0_10px_25px_-18px_var(--accent-soft-strong)] ${gradeBoxPadding}`}
             >
               <p
                 className={`font-medium uppercase tracking-wider text-[var(--text-muted)] text-[9px]`}
@@ -299,7 +299,7 @@ export default function Result({
             {onDownload && (
               <button
                 onClick={onDownload}
-                className={`group relative overflow-hidden rounded-lg border border-[var(--border-light)] bg-[var(--bg-card)] font-semibold text-[var(--text-secondary)] transition-all hover:border-[var(--accent)]/40 hover:bg-[var(--bg-hover)] hover:text-[var(--accent)] ${compact ? "px-3 py-2 text-[10px]" : "px-4 py-2.5 text-xs"}`}
+                className={`group relative overflow-hidden rounded-lg border border-[var(--border-light)] bg-[var(--bg-card)] font-semibold text-[var(--text-secondary)] transition-all duration-150 hover:border-[var(--accent)]/40 hover:bg-[var(--bg-hover)] hover:text-[var(--accent)] active:scale-[0.97] ${compact ? "px-3 py-2 text-[10px]" : "px-4 py-2.5 text-xs"}`}
               >
                 <span className="relative z-10 flex items-center gap-2">
                   <span>↓</span>
@@ -349,7 +349,7 @@ export default function Result({
               <button
                 key={tab.id}
                 onClick={() => handleTabClick(tab.id)}
-                className={`relative flex items-center gap-2 font-medium transition-all ${tabPadding} ${
+                className={`relative flex items-center gap-2 font-medium transition-colors duration-150 ${tabPadding} ${
                   activeTab === tab.id
                     ? "text-[var(--text-primary)]"
                     : "text-[var(--text-muted)] hover:text-[var(--text-secondary)]"
@@ -374,7 +374,7 @@ export default function Result({
           {!testData && !testLoading && activeTab === "audit" && (
             <button
               onClick={() => handleTabClick("tests")}
-              className={`ml-auto mb-1 flex items-center gap-2 rounded-lg border border-[var(--accent)]/40 bg-[var(--accent-soft)] font-semibold text-[var(--accent)] transition-all hover:bg-[var(--accent-soft-strong)] ${buttonPadding}`}
+              className={`ml-auto mb-1 flex items-center gap-2 rounded-lg border border-[var(--accent)]/40 bg-[var(--accent-soft)] font-semibold text-[var(--accent)] transition-all duration-150 hover:bg-[var(--accent-soft-strong)] active:scale-[0.97] ${buttonPadding}`}
             >
               <span>+</span>
               {compact ? "Tests" : "Generate Tests"}
@@ -483,7 +483,7 @@ export default function Result({
                   {architecture.map((a, i) => (
                     <div
                       key={i}
-                      className={`rounded-lg border border-[var(--border-dark)] bg-[var(--bg-primary)] transition hover:border-[var(--border-light)] ${compact ? "p-2" : "p-3"}`}
+                      className={`rounded-lg border border-[var(--border-dark)] bg-[var(--bg-primary)] transition-colors duration-150 hover:border-[var(--border-light)] ${compact ? "p-2" : "p-3"}`}
                     >
                       <div className="mb-1 flex items-center gap-2">
                         <span
@@ -550,7 +550,7 @@ export default function Result({
                             <button
                               onClick={() => handleAutoFix(b, "bug")}
                               disabled={fixing[issueId]}
-                              className={`mt-2 flex items-center gap-1 rounded-lg bg-[var(--accent)] text-[var(--accent-contrast)] transition hover:bg-[var(--accent-hover)] disabled:opacity-50 ${compact ? "px-2 py-1 text-[9px]" : "px-3 py-1.5 text-[10px]"}`}
+                              className={`mt-2 flex items-center gap-1 rounded-lg bg-[var(--accent)] text-[var(--accent-contrast)] transition-all duration-150 hover:bg-[var(--accent-hover)] active:scale-[0.96] disabled:opacity-50 disabled:active:scale-100 ${compact ? "px-2 py-1 text-[9px]" : "px-3 py-1.5 text-[10px]"}`}
                             >
                               {fixing[issueId] ? (
                                 <>
@@ -609,7 +609,7 @@ export default function Result({
                             <button
                               onClick={() => handleAutoFix(s, "security")}
                               disabled={fixing[issueId]}
-                              className={`mt-2 flex items-center gap-1 rounded-lg bg-[var(--accent)] text-[var(--accent-contrast)] transition hover:bg-[var(--accent-hover)] disabled:opacity-50 ${compact ? "px-2 py-1 text-[9px]" : "px-3 py-1.5 text-[10px]"}`}
+                              className={`mt-2 flex items-center gap-1 rounded-lg bg-[var(--accent)] text-[var(--accent-contrast)] transition-all duration-150 hover:bg-[var(--accent-hover)] active:scale-[0.96] disabled:opacity-50 disabled:active:scale-100 ${compact ? "px-2 py-1 text-[9px]" : "px-3 py-1.5 text-[10px]"}`}
                             >
                               {fixing[issueId] ? (
                                 <>
@@ -673,7 +673,7 @@ export default function Result({
                   {toolsAndPackages.map((t, i) => (
                     <span
                       key={i}
-                      className={`rounded-md border border-[var(--border-light)] bg-[var(--bg-card)] font-mono text-[var(--text-secondary)] transition hover:border-[var(--accent)]/40 hover:text-[var(--accent)] ${compact ? "px-2 py-0.5 text-[9px]" : "px-2.5 py-1 text-[10px]"}`}
+                      className={`rounded-md border border-[var(--border-light)] bg-[var(--bg-card)] font-mono text-[var(--text-secondary)] transition-colors duration-150 hover:border-[var(--accent)]/40 hover:text-[var(--accent)] ${compact ? "px-2 py-0.5 text-[9px]" : "px-2.5 py-1 text-[10px]"}`}
                     >
                       {t}
                     </span>
@@ -838,7 +838,7 @@ export default function Result({
                       {securityVulnerabilities.map((v, i) => (
                         <tr
                           key={i}
-                          className="border-b border-[var(--border-dark)] last:border-none"
+                          className="border-b border-[var(--border-dark)] transition-colors duration-150 last:border-none hover:bg-[var(--bg-hover)]/40"
                         >
                           <td className="py-2 pr-4">
                             <span
@@ -895,7 +895,7 @@ export default function Result({
                       {dependencyVulnerabilities.map((v, i) => (
                         <tr
                           key={i}
-                          className="border-b border-[var(--border-dark)] last:border-none"
+                          className="border-b border-[var(--border-dark)] transition-colors duration-150 last:border-none hover:bg-[var(--bg-hover)]/40"
                         >
                           <td className="py-2 pr-4 font-mono text-[var(--text-secondary)]">
                             {v.package}
@@ -1177,7 +1177,7 @@ export default function Result({
                     </p>
                     <button
                       onClick={runGenerateTests}
-                      className="mt-3 rounded-lg border border-[var(--color-danger)]/30 bg-[var(--color-danger-soft)] px-3 py-1.5 text-xs font-medium text-[var(--color-danger)] transition hover:bg-[var(--color-danger)]/20"
+                      className="mt-3 rounded-lg border border-[var(--color-danger)]/30 bg-[var(--color-danger-soft)] px-3 py-1.5 text-xs font-medium text-[var(--color-danger)] transition-all duration-150 hover:bg-[var(--color-danger)]/20 active:scale-[0.97]"
                     >
                       Retry
                     </button>
@@ -1285,7 +1285,7 @@ export default function Result({
                               </span>
                               <button
                                 onClick={() => copy(file.testCode, `file-${i}`)}
-                                className={`rounded-md border border-[var(--border-light)] bg-[var(--bg-hover)] text-[var(--text-secondary)] transition hover:text-[var(--text-primary)] ${compact ? "px-1.5 py-0.5 text-[9px]" : "px-2 py-1 text-[10px]"}`}
+                                className={`rounded-md border border-[var(--border-light)] bg-[var(--bg-hover)] text-[var(--text-secondary)] transition-all duration-150 hover:text-[var(--text-primary)] active:scale-[0.95] ${compact ? "px-1.5 py-0.5 text-[9px]" : "px-2 py-1 text-[10px]"}`}
                               >
                                 {copiedId === `file-${i}` ? "Copied" : "Copy"}
                               </button>
@@ -1398,7 +1398,7 @@ export default function Result({
                             </pre>
                             <button
                               onClick={() => copy(t.codeSnippet, `int-${i}`)}
-                              className={`absolute right-2 top-2 rounded-md border border-[var(--border-light)] bg-[var(--bg-card)] text-[var(--text-secondary)] transition hover:text-[var(--text-primary)] ${compact ? "px-1.5 py-0.5 text-[9px]" : "px-2 py-1 text-[10px]"}`}
+                              className={`absolute right-2 top-2 rounded-md border border-[var(--border-light)] bg-[var(--bg-card)] text-[var(--text-secondary)] transition-all duration-150 hover:text-[var(--text-primary)] active:scale-[0.95] ${compact ? "px-1.5 py-0.5 text-[9px]" : "px-2 py-1 text-[10px]"}`}
                             >
                               {copiedId === `int-${i}` ? "✓" : "Copy"}
                             </button>
@@ -1436,7 +1436,7 @@ export default function Result({
                             </div>
                             <button
                               onClick={() => copy(m.snippet, `mock-${i}`)}
-                              className={`shrink-0 rounded-md border border-[var(--border-light)] bg-[var(--bg-hover)] text-[var(--text-secondary)] transition hover:text-[var(--text-primary)] ${compact ? "px-1.5 py-0.5 text-[9px]" : "px-2 py-1 text-[10px]"}`}
+                              className={`shrink-0 rounded-md border border-[var(--border-light)] bg-[var(--bg-hover)] text-[var(--text-secondary)] transition-all duration-150 hover:text-[var(--text-primary)] active:scale-[0.95] ${compact ? "px-1.5 py-0.5 text-[9px]" : "px-2 py-1 text-[10px]"}`}
                             >
                               {copiedId === `mock-${i}` ? "✓" : "Copy"}
                             </button>
@@ -1451,7 +1451,7 @@ export default function Result({
                   <button
                     onClick={runGenerateTests}
                     disabled={testLoading}
-                    className={`flex items-center gap-2 rounded-lg border border-[var(--border-light)] bg-[var(--bg-card)] font-medium text-[var(--text-secondary)] transition hover:border-[var(--accent)]/40 hover:bg-[var(--bg-hover)] hover:text-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-50 ${compact ? "px-2 py-1.5 text-[10px]" : "px-3 py-2 text-[11px]"}`}
+                    className={`flex items-center gap-2 rounded-lg border border-[var(--border-light)] bg-[var(--bg-card)] font-medium text-[var(--text-secondary)] transition-all duration-150 hover:border-[var(--accent)]/40 hover:bg-[var(--bg-hover)] hover:text-[var(--accent)] active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50 disabled:active:scale-100 ${compact ? "px-2 py-1.5 text-[10px]" : "px-3 py-2 text-[11px]"}`}
                   >
                     <span>↻</span>
                     {compact ? "Re-gen" : "Re-generate Tests"}
@@ -1510,7 +1510,7 @@ function ScoreCard({ label, value, icon, compact }) {
   const val = typeof value === "number" ? Math.min(Math.max(value, 0), 100) : 0;
   return (
     <div
-      className={`rounded-xl border border-[var(--border-light)] bg-[var(--bg-card)] transition-all hover:border-[var(--border-medium)] ${compact ? "p-2.5" : "p-3.5"}`}
+      className={`rounded-xl border border-[var(--border-light)] bg-[var(--bg-card)] transition-all duration-200 hover:-translate-y-0.5 hover:border-[var(--border-medium)] ${compact ? "p-2.5" : "p-3.5"}`}
     >
       <div className="flex items-center justify-between">
         <div
@@ -1617,7 +1617,7 @@ function TestCaseRow({
           </pre>
           <button
             onClick={() => onCopy(c.codeSnippet, id)}
-            className={`absolute right-2 top-2 rounded-md border border-[var(--border-light)] bg-[var(--bg-card)] text-[var(--text-secondary)] transition hover:text-[var(--text-primary)] ${compact ? "px-1.5 py-0.5 text-[9px]" : "px-2 py-1 text-[10px]"}`}
+            className={`absolute right-2 top-2 rounded-md border border-[var(--border-light)] bg-[var(--bg-card)] text-[var(--text-secondary)] transition-all duration-150 hover:text-[var(--text-primary)] active:scale-[0.95] ${compact ? "px-1.5 py-0.5 text-[9px]" : "px-2 py-1 text-[10px]"}`}
           >
             {copiedId === id ? "✓" : "Copy"}
           </button>
