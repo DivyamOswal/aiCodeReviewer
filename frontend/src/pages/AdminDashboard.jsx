@@ -7,7 +7,7 @@ import ConfirmationDialog from "../components/ConfirmationDialog";
 
 function StatCard({ label, value, icon: Icon, color }) {
   return (
-    <div className="rounded-xl border border-[var(--border-light)] bg-[var(--bg-card)] p-5">
+    <div className="rounded-xl border border-[var(--border-light)] bg-[var(--bg-card)] p-5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_15px_35px_-20px_var(--accent-soft-strong)]">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm text-[var(--text-muted)]">{label}</p>
@@ -84,10 +84,10 @@ export default function AdminDashboard() {
 
         {/* Stats Grid */}
         <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <StatCard label="Total Users" value={stats?.totalUsers || 0} icon={Users} color="bg-blue-500/10 text-blue-400" />
-          <StatCard label="Workspaces" value={stats?.totalWorkspaces || 0} icon={Briefcase} color="bg-purple-500/10 text-purple-400" />
-          <StatCard label="Reports" value={stats?.totalReports || 0} icon={FileText} color="bg-green-500/10 text-green-400" />
-          <StatCard label="Revenue" value={`₹${(stats?.totalRevenue || 0).toLocaleString()}`} icon={DollarSign} color="bg-yellow-500/10 text-yellow-400" />
+          <StatCard label="Total Users" value={stats?.totalUsers || 0} icon={Users} color="bg-[var(--color-info-soft)] text-[var(--color-info)]" />
+          <StatCard label="Workspaces" value={stats?.totalWorkspaces || 0} icon={Briefcase} color="bg-[var(--accent-soft)] text-[var(--accent)]" />
+          <StatCard label="Reports" value={stats?.totalReports || 0} icon={FileText} color="bg-[var(--color-success-soft)] text-[var(--color-success)]" />
+          <StatCard label="Revenue" value={`₹${(stats?.totalRevenue || 0).toLocaleString()}`} icon={DollarSign} color="bg-[var(--color-warning-soft)] text-[var(--color-warning)]" />
         </div>
 
         {/* Tab Navigation */}
@@ -97,7 +97,7 @@ export default function AdminDashboard() {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`px-4 py-2 text-sm font-medium capitalize transition ${
+                className={`px-4 py-2 text-sm font-medium capitalize transition-colors duration-150 ${
                   activeTab === tab
                     ? "border-b-2 border-[var(--accent)] text-[var(--accent)]"
                     : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
@@ -143,21 +143,21 @@ function Overview({ stats }) {
       <div className="rounded-xl border border-[var(--border-light)] bg-[var(--bg-card)] p-6">
         <h2 className="text-lg font-semibold text-[var(--text-primary)]">System Overview</h2>
         <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <div className="flex items-center gap-3 rounded-lg border border-[var(--border-light)] bg-[var(--bg-primary)] p-4">
+          <div className="flex items-center gap-3 rounded-lg border border-[var(--border-light)] bg-[var(--bg-primary)] p-4 transition-colors duration-150 hover:border-[var(--border-medium)]">
             <Activity className="h-5 w-5 text-[var(--accent)]" />
             <div>
               <p className="text-xs text-[var(--text-muted)]">System Status</p>
               <p className="text-sm font-medium text-[var(--color-success)]">● Online</p>
             </div>
           </div>
-          <div className="flex items-center gap-3 rounded-lg border border-[var(--border-light)] bg-[var(--bg-primary)] p-4">
+          <div className="flex items-center gap-3 rounded-lg border border-[var(--border-light)] bg-[var(--bg-primary)] p-4 transition-colors duration-150 hover:border-[var(--border-medium)]">
             <Clock className="h-5 w-5 text-[var(--accent)]" />
             <div>
               <p className="text-xs text-[var(--text-muted)]">Uptime</p>
               <p className="text-sm font-medium text-[var(--text-primary)]">{systemUptime}</p>
             </div>
           </div>
-          <div className="flex items-center gap-3 rounded-lg border border-[var(--border-light)] bg-[var(--bg-primary)] p-4">
+          <div className="flex items-center gap-3 rounded-lg border border-[var(--border-light)] bg-[var(--bg-primary)] p-4 transition-colors duration-150 hover:border-[var(--border-medium)]">
             <Zap className="h-5 w-5 text-[var(--accent)]" />
             <div>
               <p className="text-xs text-[var(--text-muted)]">Last Updated</p>
@@ -211,13 +211,13 @@ function Overview({ stats }) {
       <div className="rounded-xl border border-[var(--border-light)] bg-[var(--bg-card)] p-6">
         <h3 className="text-sm font-semibold text-[var(--text-primary)]">Quick Actions</h3>
         <div className="mt-3 flex flex-wrap gap-3">
-          <button className="rounded-lg border border-[var(--border-light)] bg-[var(--bg-primary)] px-4 py-2 text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-hover)]">
+          <button className="rounded-lg border border-[var(--border-light)] bg-[var(--bg-primary)] px-4 py-2 text-sm text-[var(--text-secondary)] transition-all duration-150 hover:bg-[var(--bg-hover)] active:scale-[0.97]">
             View All Users
           </button>
-          <button className="rounded-lg border border-[var(--border-light)] bg-[var(--bg-primary)] px-4 py-2 text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-hover)]">
+          <button className="rounded-lg border border-[var(--border-light)] bg-[var(--bg-primary)] px-4 py-2 text-sm text-[var(--text-secondary)] transition-all duration-150 hover:bg-[var(--bg-hover)] active:scale-[0.97]">
             Export Reports
           </button>
-          <button className="rounded-lg border border-[var(--border-light)] bg-[var(--bg-primary)] px-4 py-2 text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-hover)]">
+          <button className="rounded-lg border border-[var(--border-light)] bg-[var(--bg-primary)] px-4 py-2 text-sm text-[var(--text-secondary)] transition-all duration-150 hover:bg-[var(--bg-hover)] active:scale-[0.97]">
             System Logs
           </button>
         </div>
@@ -274,7 +274,7 @@ function UserManagement({ openDialog }) {
           placeholder="Search users..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 rounded-lg border border-[var(--border-light)] bg-[var(--bg-input)] px-4 py-2 text-sm text-[var(--text-primary)] outline-none focus:border-[var(--accent)]"
+          className="flex-1 rounded-lg border border-[var(--border-light)] bg-[var(--bg-input)] px-4 py-2 text-sm text-[var(--text-primary)] outline-none transition-colors focus:border-[var(--accent)]"
         />
       </div>
       <div className="overflow-x-auto">
@@ -289,7 +289,7 @@ function UserManagement({ openDialog }) {
           </thead>
           <tbody className="divide-y divide-[var(--border-dark)]">
             {users.map((u) => (
-              <tr key={u._id}>
+              <tr key={u._id} className="transition-colors duration-150 hover:bg-[var(--bg-hover)]/40">
                 <td className="px-4 py-2 text-[var(--text-primary)]">{u.name}</td>
                 <td className="px-4 py-2 text-[var(--text-secondary)]">{u.email}</td>
                 <td className="px-4 py-2">
@@ -300,7 +300,7 @@ function UserManagement({ openDialog }) {
                 <td className="px-4 py-2">
                   <button
                     onClick={() => toggleAdmin(u._id)}
-                    className="rounded-lg border border-[var(--border-light)] px-3 py-1 text-xs text-[var(--text-secondary)] hover:bg-[var(--bg-hover)]"
+                    className="rounded-lg border border-[var(--border-light)] px-3 py-1 text-xs text-[var(--text-secondary)] transition-all duration-150 hover:bg-[var(--bg-hover)] active:scale-[0.96]"
                   >
                     Toggle Admin
                   </button>
@@ -365,14 +365,14 @@ function WorkspaceManagement({ openDialog }) {
           </thead>
           <tbody className="divide-y divide-[var(--border-dark)]">
             {workspaces.map((ws) => (
-              <tr key={ws._id}>
+              <tr key={ws._id} className="transition-colors duration-150 hover:bg-[var(--bg-hover)]/40">
                 <td className="px-4 py-2 text-[var(--text-primary)]">{ws.name}</td>
                 <td className="px-4 py-2 text-[var(--text-secondary)]">{ws.ownerId?.email || "N/A"}</td>
                 <td className="px-4 py-2 text-[var(--text-secondary)]">{ws.members?.length || 0}</td>
                 <td className="px-4 py-2">
                   <button
                     onClick={() => deleteWorkspace(ws._id)}
-                    className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-1 text-xs text-red-400 hover:bg-red-500/20"
+                    className="rounded-lg border border-[var(--color-danger)]/30 bg-[var(--color-danger-soft)] px-3 py-1 text-xs text-[var(--color-danger)] transition-all duration-150 hover:bg-[var(--color-danger)]/20 active:scale-[0.96]"
                   >
                     Delete
                   </button>
@@ -420,7 +420,7 @@ function ReportManagement() {
           </thead>
           <tbody className="divide-y divide-[var(--border-dark)]">
             {reports.map((r) => (
-              <tr key={r._id}>
+              <tr key={r._id} className="transition-colors duration-150 hover:bg-[var(--bg-hover)]/40">
                 <td className="px-4 py-2 text-[var(--text-primary)]">{r.repoUrl}</td>
                 <td className="px-4 py-2 text-[var(--text-secondary)]">{r.userId?.email || "Unknown"}</td>
                 <td className="px-4 py-2 text-[var(--text-secondary)]">{r.workspaceId?.name || "N/A"}</td>

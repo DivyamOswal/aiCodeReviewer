@@ -84,8 +84,8 @@ export default function Login() {
           >
             Email
           </label>
-          <div className="relative">
-            <MailIcon className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--text-muted)]" />
+          <div className="group relative">
+            <MailIcon className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--text-muted)] transition-colors duration-200 group-focus-within:text-[var(--accent)]" />
             <input
               id="email"
               type="email"
@@ -113,8 +113,8 @@ export default function Login() {
               Forgot password?
             </NavLink>
           </div>
-          <div className="relative">
-            <LockIcon className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--text-muted)]" />
+          <div className="group relative">
+            <LockIcon className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--text-muted)] transition-colors duration-200 group-focus-within:text-[var(--accent)]" />
             <input
               id="password"
               type="password"

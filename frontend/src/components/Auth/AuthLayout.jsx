@@ -133,7 +133,7 @@ export default function AuthLayout({ title, terminalText, error, onOAuth, footer
               />
             ))}
 
-            <div className="relative space-y-3.5 overflow-visible rounded-2xl border border-[var(--border-light)] bg-[var(--bg-card)] p-5 shadow-[var(--shadow-md)] sm:p-7">
+            <div className="relative space-y-3.5 overflow-visible rounded-2xl border border-[var(--border-light)] bg-[var(--bg-card)] p-5 shadow-[var(--shadow-md),0_30px_60px_-35px_var(--accent-soft-strong)] sm:p-7">
               {error && (
                 <div
                   role="alert"

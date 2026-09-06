@@ -437,7 +437,7 @@ export default function Dashboard() {
             {/* ANALYZER */}
             <div
               ref={analyzerRef}
-              className="relative overflow-hidden rounded-2xl border border-[var(--border-light)] bg-[var(--bg-card)]"
+              className="relative overflow-hidden rounded-2xl border border-[var(--border-light)] bg-[var(--bg-card)] shadow-[0_25px_50px_-30px_var(--accent-soft-strong)]"
             >
               <div className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-[var(--accent-soft)] blur-3xl" />
               <div className="pointer-events-none absolute -bottom-24 -left-24 h-56 w-56 rounded-full bg-[var(--accent-soft)] blur-3xl" />
@@ -466,7 +466,7 @@ export default function Dashboard() {
                     </span>
                     <input
                       aria-label="GitHub repository URL"
-                      className={`w-full rounded-xl border border-[var(--border-light)] bg-[var(--bg-input)] text-[var(--text-primary)] outline-none placeholder:text-[var(--text-muted)] transition focus:border-[var(--accent)]/60 focus:ring-1 focus:ring-[var(--accent)]/20 ${compactClasses.inputHeight} ${compactClasses.inputPadding}`}
+                      className={`w-full rounded-xl border border-[var(--border-light)] bg-[var(--bg-input)] text-[var(--text-primary)] outline-none placeholder:text-[var(--text-muted)] transition-colors focus:border-[var(--accent)]/60 focus:ring-1 focus:ring-[var(--accent)]/20 ${compactClasses.inputHeight} ${compactClasses.inputPadding}`}
                       placeholder="https://github.com/username/repository"
                       value={repoUrl}
                       onChange={(e) => {
@@ -533,7 +533,7 @@ export default function Dashboard() {
 
             {/* RECENT REPORTS */}
             {data.recentReports?.length > 0 && (
-              <div ref={recentReportsRef} className="overflow-hidden rounded-2xl border border-[var(--border-light)] bg-[var(--bg-card)]">
+              <div ref={recentReportsRef} className="overflow-hidden rounded-2xl border border-[var(--border-light)] bg-[var(--bg-card)] shadow-[0_20px_45px_-30px_var(--accent-soft-strong)]">
                 <div
                   className={`flex items-center justify-between border-b border-[var(--border-dark)] ${compactClasses.recentHeaderPadding}`}
                 >
@@ -555,7 +555,7 @@ export default function Dashboard() {
                     </span>
                     <button
                       onClick={() => navigate("/history")}
-                      className={`rounded-lg px-2.5 py-1.5 text-[9px] font-medium text-[var(--accent)] transition hover:bg-[var(--accent-soft)] ${compact ? "px-2 py-1" : ""}`}
+                      className={`rounded-lg px-2.5 py-1.5 text-[9px] font-medium text-[var(--accent)] transition-colors duration-150 hover:bg-[var(--accent-soft)] active:scale-[0.96] ${compact ? "px-2 py-1" : ""}`}
                     >
                       View all →
                     </button>
@@ -656,7 +656,7 @@ function StatCard({ label, value, sub, icon, delay, compact, statValueClass, sta
 
   return (
     <div
-      className={`relative overflow-hidden rounded-xl border border-[var(--accent)]/20 bg-[var(--bg-card)] transition-all duration-200 hover:-translate-y-0.5 ${statPaddingClass}`}
+      className={`relative overflow-hidden rounded-xl border border-[var(--accent)]/20 bg-[var(--bg-card)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_15px_35px_-20px_var(--accent-soft-strong)] ${statPaddingClass}`}
     >
       <div className="pointer-events-none absolute -right-8 -top-8 h-20 w-20 rounded-full bg-[var(--accent-soft)] blur-2xl" />
       <div className="relative flex items-start justify-between">
@@ -784,7 +784,7 @@ function ReportRow({ report, onView, compact }) {
 
       <button
         onClick={onView}
-        className={`rounded-lg border border-[var(--border-light)] bg-[var(--bg-card)] font-medium text-[var(--text-secondary)] transition hover:border-[var(--accent)]/40 hover:bg-[var(--accent-soft)] hover:text-[var(--accent)] ${viewButtonPadding}`}
+        className={`rounded-lg border border-[var(--border-light)] bg-[var(--bg-card)] font-medium text-[var(--text-secondary)] transition-all duration-150 hover:border-[var(--accent)]/40 hover:bg-[var(--accent-soft)] hover:text-[var(--accent)] active:scale-[0.96] ${viewButtonPadding}`}
       >
         View →
       </button>
